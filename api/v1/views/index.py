@@ -2,7 +2,7 @@
 """Index file"""
 
 from api.v1.views import app_views
-from flask import Flask, jsonify
+from flask import jsonify
 # from flask_cors import CORS
 
 # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
