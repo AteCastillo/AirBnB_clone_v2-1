@@ -77,10 +77,11 @@ class DBStorage:
 
     def get(self, cls, id):
         """A method to retrieve one object"""
-        key = cls.__name__ + '.' + id
-        new_dict = self.all(cls)
-        if key in new_dict:
-            return new_dict[key]
+        if cls and id:
+            key = cls.__name__ + '.' + id
+            new_dict = self.all(cls)
+            if key in new_dict:
+                return new_dict[key]
         else:
             return None
 
