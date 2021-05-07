@@ -92,5 +92,3 @@ class DBStorage:
         else:
             new_dict = self.all()
             return len(new_dict)
-
-        
