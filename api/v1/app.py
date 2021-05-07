@@ -13,6 +13,7 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def context(self ):
+    '''close all'''
     storage.close()
 
 

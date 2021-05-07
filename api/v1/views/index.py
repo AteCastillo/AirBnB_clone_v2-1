@@ -14,10 +14,12 @@ from models.user import User
 
 @app_views.route('/status')
 def status():
+    '''define status ok'''
     return jsonify({'status': 'OK'})
 
 @app_views.route('/stats')
 def stats():
+    '''returns number of objects for every class'''
     new_dict = {
     "amenities": Amenity, 
     "cities": City, 
