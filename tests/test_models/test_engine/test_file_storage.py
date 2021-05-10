@@ -113,7 +113,7 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
-    
+
     def test_get(self):
         """Test that get() method works correclty"""
         new_state = State(name="Valle")
