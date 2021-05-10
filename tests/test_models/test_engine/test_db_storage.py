@@ -72,8 +72,7 @@ class TestFileStorage(unittest.TestCase):
         """Test that save properly saves objects to file.json"""
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
-                               "Not testing db storage")
-
+                     "Not testing db storage")
     def test_get(self):
         """Test get() method for DBStorage"""
         new_state = State(name="Valle")
@@ -85,16 +84,15 @@ class TestFileStorage(unittest.TestCase):
         self.assertIs(None, models.storage.get("Mama", 1234))
         self.assertIs(None, models.storage.get("City", new_city.id))
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
-                               "Not testing db storage")
     def test_count(self):
-        """Test count() method for DBStorage"""
-        first_count_all = models.storage.count()
-        first_count_city = models.storage.count("City")
+        """Test that count() method works correcly"""
+        first_count = models.storage.count()
+        first_count_user = models.storage.count("User")
         first_count_state = models.storage.count("State")
         new_state = State(name="Valle")
         new_state2 = State(name="Caldas")
-        new_city = City(name="Cali")
+        new_user = User(name="Cholado")
         self.assertEqual(models.storage.count(), first_count + 3)
-        self.assertEqual(models.storage.count("City"), first_count_city + 1)
         self.assertEqual(models.storage.count("State"), first_count_state + 2)
+        self.assertEqual(models.storage.count("User"), first_count_user + 1)
+        self.assertNotEqual(models.storage.count("User"), 0)
