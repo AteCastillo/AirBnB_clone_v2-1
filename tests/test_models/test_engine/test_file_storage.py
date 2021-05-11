@@ -16,6 +16,7 @@ from models.state import State
 from models.user import User
 import json
 import os
+import pep8
 import unittest
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
@@ -28,6 +29,21 @@ class TestFileStorageDocs(unittest.TestCase):
     def setUpClass(cls):
         """Set up for the doc tests"""
         cls.fs_f = inspect.getmembers(FileStorage, inspect.isfunction)
+
+    def test_pep8_conformance_file_storage(self):
+        """Test that models/engine/file_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['models/engine/file_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_test_file_storage(self):
+        """Test tests/test_models/test_file_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['tests/test_models/test_engine/\
+test_file_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
     def test_file_storage_module_docstring(self):
         """Test for the file_storage.py module docstring"""
@@ -98,27 +114,27 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
-    def test_get(self):
-        """Test that get() method works correclty"""
-        new_state = State(name="Valle")
-        new_state2 = State(name="Caldas")
-        new_user = User(name="Cholado")
-        self.assertIs(new_state, models.storage.get("State", new_state.id))
-        self.assertIs(new_state2, models.storage.get("State", new_state2.id))
-        self.assertIs(None, models.storage.get("Mamamia", 1234))
-        self.assertIs(None, models.storage.get("State", 4321))
-        self.assertIs(new_user, models.storage.get("User", new_user.id))
-        self.assertIs(None, models.storage.get("User", 1234))
+    def test_filestorage_get(self):
+        '''
+            Testing Get method
+        '''
+        filestor = FileStorage()
+        new = State()
+        new.name = "Alabama"
+        filestor.new(new)
+        new_id = new.id
+        filestor.save()
+        state = filestor.get("State", new_id)
+        self.assertEqual(state.name, "Alabama")
 
-    def test_count(self):
-        """Test that count() method works correcly"""
-        first_count = models.storage.count()
-        first_count_user = models.storage.count("User")
-        first_count_state = models.storage.count("State")
-        new_state = State(name="Valle")
-        new_state2 = State(name="Caldas")
-        new_user = User(name="Cholado")
-        self.assertEqual(models.storage.count(), first_count + 3)
-        self.assertEqual(models.storage.count("State"), first_count_state + 2)
-        self.assertEqual(models.storage.count("User"), first_count_user + 1)
-        self.assertNotEqual(models.storage.count("User"), 0)
+    def test_filestorage_count(self):
+        '''
+            Testing Count method
+        '''
+        filestor = FileStorage()
+        old_count = filestor.count("State")
+        new = State(name="Alabama")
+        filestor.new(new)
+        filestor.save()
+        new_count = filestor.count("State")
+        self.assertEqual(old_count + 1, new_count)

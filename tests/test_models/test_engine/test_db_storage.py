@@ -16,6 +16,7 @@ from models.state import State
 from models.user import User
 import json
 import os
+import pep8
 import unittest
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
@@ -28,6 +29,21 @@ class TestDBStorageDocs(unittest.TestCase):
     def setUpClass(cls):
         """Set up for the doc tests"""
         cls.dbs_f = inspect.getmembers(DBStorage, inspect.isfunction)
+
+    def test_pep8_conformance_db_storage(self):
+        """Test that models/engine/db_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['models/engine/db_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_test_db_storage(self):
+        """Test tests/test_models/test_db_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['tests/test_models/test_engine/\
+test_db_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
     def test_db_storage_module_docstring(self):
         """Test for the db_storage.py module docstring"""
@@ -71,28 +87,21 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
-                     "Not testing db storage")
-    def test_get(self):
-        """Test get() method for DBStorage"""
-        new_state = State(name="Valle")
-        new_state.save()
-        new_city = City(name="Cali")
-        new_city.save()
-        self.assertIs(new_state, models.storage.get("State", new_state.id))
-        self.assertIs(None, models.storage.get("State", 1234))
-        self.assertIs(None, models.storage.get("Mama", 1234))
-        self.assertIs(None, models.storage.get("City", new_city.id))
+    def test_dbstorage_get(self):
+        '''
+            Testing Get method
+        '''
+        new = State(name="Alabama")
+        new.save()
+        state = models.storage.get("State", str(state.id))
+        self.assertEqual(state.name, "Alabama")
 
-    def test_count(self):
-        """Test that count() method works correcly"""
-        first_count = models.storage.count()
-        first_count_user = models.storage.count("User")
-        first_count_state = models.storage.count("State")
-        new_state = State(name="Valle")
-        new_state2 = State(name="Caldas")
-        new_user = User(name="Cholado")
-        self.assertEqual(models.storage.count(), first_count + 3)
-        self.assertEqual(models.storage.count("State"), first_count_state + 2)
-        self.assertEqual(models.storage.count("User"), first_count_user + 1)
-        self.assertNotEqual(models.storage.count("User"), 0)
+    def test_dbstorage_count(self):
+        '''
+            Testing Count method
+        '''
+        old_count = models.storage.count("State")
+        new = State(name="Alabama")
+        new.save()
+        new_count = models.storage.count("State")
+        self.assertEqual(old_count + 1, new_count)
