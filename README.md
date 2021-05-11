@@ -156,7 +156,7 @@ Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://tw
 
 Second part of Airbnb: Joann Vuong
 
-** Tasks from Api folder updated by Atenea Castillo and Luciana Sarachu.
+*Tasks from Api folder updated by Atenea Castillo and Luciana Sarachu.*
 
 ## License
 Public Domain. No copy write protection
